@@ -1,5 +1,15 @@
 # flutter_samples
 
+
+## Resources
+
+# Integration testing:
+  
+  - [https://medium.com/@sagarsuri56/integration-and-unit-testing-in-flutter-f08e4bd961d5](https://medium.com/@sagarsuri56/integration-and-unit-testing-in-flutter-f08e4bd961d5)
+  
+  
+  
+  
 A new Flutter application.
 
 ## Getting Started
