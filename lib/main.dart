@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 
-class HelloRectangle extends StatelessWidget {
+import 'category.dart';
+
+
+const _categoryName = 'Cake';
+const _categoryIcon = Icons.cake;
+const _categoryColor = Colors.green;
+
+void main() {
+  runApp(UnitConverterApp());
+}
+
+/// This widget is the root of our application.
+/// Currently, we just show one widget in our app.
+class UnitConverterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        color: Colors.greenAccent,
-        height: 500,
-        width: 300,
-        child: Center(
-            child: Text(
-              "Hello",
-              style: TextStyle(fontSize: 40.0),
-              textAlign: TextAlign.center,
-            )),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Unit Converter',
+      home: Scaffold(
+        backgroundColor: Colors.green[100],
+        body: Center(
+          child: Category(
+            name: _categoryName,
+            color: _categoryColor,
+            iconLocation: _categoryIcon,
+          ),
+        ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("This is the title"),
-        ),
-        body: HelloRectangle(),
-      ),
-    ),
-  );
 }
