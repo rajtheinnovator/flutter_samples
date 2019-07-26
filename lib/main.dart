@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'category_route.dart';
+import 'category_screen.dart';
 
 
 void main() {
@@ -13,8 +13,7 @@ class UnitConverterApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
-      // our home should now point to an instance of the CategoryRoute widget.
-      home: CategoryRoute(),
+      home: CategoryScreen(),
     );
   }
 }
