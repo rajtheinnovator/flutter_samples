@@ -42,6 +42,8 @@ class Category extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
+        margin: EdgeInsets.all(8.0),
+        color: Colors.green[50],
         height: _rowHeight,
         child: InkWell(
           borderRadius: _borderRadius,
@@ -54,6 +56,7 @@ class Category extends StatelessWidget {
           },
           child: Padding(
             padding: EdgeInsets.all(8.0),
+
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               // There are two ways to denote a list: `[]` and `List()`.
