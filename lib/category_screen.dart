@@ -5,15 +5,17 @@ import 'unit.dart';
 
 final _backgroundColor = Colors.green[100];
 
-/// Category Route (screen).
-///
-/// This is the 'home' screen of the Unit Converter. It shows a header and
-/// a list of [Categories].
-///
-/// While it is named CategoryRoute, a more apt name would be CategoryScreen,
-/// because it is responsible for the UI at the route's destination.
-class CategoryScreen extends StatelessWidget {
+
+class CategoryScreen extends StatefulWidget {
+
   const CategoryScreen();
+
+  @override
+  _CategoryScreenState createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  final _categories = <Category>[];
 
   static const _categoryNames = <String>[
     'Length',
@@ -36,6 +38,19 @@ class CategoryScreen extends StatelessWidget {
     Colors.purpleAccent,
     Colors.red,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < _categoryNames.length; i++) {
+      _categories.add(Category(
+        name: _categoryNames[i],
+        color: _baseColors[i],
+        iconLocation: Icons.cake,
+        units: _retrieveUnitList(_categoryNames[i]),
+      ));
+    }
+  }
 
   /// Makes the correct number of rows for the list view.
   ///
@@ -60,6 +75,11 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Instead of re-creating a list of Categories in every build(),
+    // save this as a variable inside the State object and create
+    // the list at initialization (in initState()).
+    // This way, you also don't have to pass in the list of categories to
+    // _buildCategoryWidgets()
     final categories = <Category>[];
 
     for (var i = 0; i < _categoryNames.length; i++) {
