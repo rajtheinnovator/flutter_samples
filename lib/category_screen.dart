@@ -5,9 +5,7 @@ import 'unit.dart';
 
 final _backgroundColor = Colors.green[100];
 
-
 class CategoryScreen extends StatefulWidget {
-
   const CategoryScreen();
 
   @override
@@ -28,15 +26,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
     'Currency',
   ];
 
-  static const _baseColors = <Color>[
-    Colors.teal,
-    Colors.orange,
-    Colors.pinkAccent,
-    Colors.blueAccent,
-    Colors.yellow,
-    Colors.greenAccent,
-    Colors.purpleAccent,
-    Colors.red,
+  static const _baseColors = <ColorSwatch>[
+    ColorSwatch(0x33579186, {
+      50: Color(0x33579186),
+      100: Color(0xFF0ABC9B),
+      'arrows': Color(0xFF20877E),
+      'border': Color(0xFF20877E),
+    }),
   ];
 
   @override
@@ -75,7 +71,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Instead of re-creating a list of Categories in every build(),
     // save this as a variable inside the State object and create
     // the list at initialization (in initState()).
     // This way, you also don't have to pass in the list of categories to

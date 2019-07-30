@@ -7,7 +7,7 @@ class ConverterScreen extends StatefulWidget {
   final String name;
 
   /// Color for this [Category].
-  final Color color;
+  final ColorSwatch color;
 
   /// Units for this [Category].
   final List<Unit> units;
