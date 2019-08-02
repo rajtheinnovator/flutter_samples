@@ -2,34 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_samples/unit.dart';
 import 'package:meta/meta.dart';
 
+import 'category.dart';
+
 const _padding = EdgeInsets.all(16.0);
 
-class ConverterScreen extends StatefulWidget {
-  /// Color for this [Category].
-  final Color color;
+/// [UnitConverter] where users can input amounts to convert in one [Unit]
+/// and retrieve the conversion in another [Unit] for a specific [Category].
+class UnitConverter extends StatefulWidget {
+  /// The current [Category] for unit conversion.
+  final Category category;
 
-  /// Units for this [Category].
-  final List<Unit> units;
-
-  /// This [ConverterScreen] requires the color and units to not be null.
-  const ConverterScreen({
-    @required this.color,
-    @required this.units,
-  })
-      : assert(color != null),
-        assert(units != null);
+  /// This [UnitConverter] takes in a [Category] with [Units]. It can't be null.
+  const UnitConverter({
+    @required this.category,
+  }) : assert(category != null);
 
   @override
-  _ConverterScreenState createState() => _ConverterScreenState();
+  _UnitConverterState createState() => _UnitConverterState();
 }
 
-class _ConverterScreenState extends State<ConverterScreen> {
+class _UnitConverterState extends State<UnitConverter> {
   Unit _fromValue;
   Unit _toValue;
   double _inputValue;
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
-
   bool _showValidationError = false;
 
   @override
@@ -37,6 +34,37 @@ class _ConverterScreenState extends State<ConverterScreen> {
     super.initState();
     _createDropdownMenuItems();
     _setDefaults();
+  }
+
+  // TODO: _createDropdownMenuItems() and _setDefaults() should also be called
+  // each time the user switches [Categories].
+
+  /// Creates fresh list of [DropdownMenuItem] widgets, given a list of [Unit]s.
+  void _createDropdownMenuItems() {
+    var newItems = <DropdownMenuItem>[];
+    for (var unit in widget.category.units) {
+      newItems.add(DropdownMenuItem(
+        value: unit.name,
+        child: Container(
+          child: Text(
+            unit.name,
+            softWrap: true,
+          ),
+        ),
+      ));
+    }
+    setState(() {
+      _unitMenuItems = newItems;
+    });
+  }
+
+  /// Sets the default values for the 'from' and 'to' [Dropdown]s, and the
+  /// updated output value if a user had previously entered an input.
+  void _setDefaults() {
+    setState(() {
+      _fromValue = widget.category.units[0];
+      _toValue = widget.category.units[1];
+    });
   }
 
   /// Clean up conversion; trim trailing zeros, e.g. 5.500 -> 5.5, 10.0 -> 10
@@ -53,6 +81,13 @@ class _ConverterScreenState extends State<ConverterScreen> {
       return outputNum.substring(0, outputNum.length - 1);
     }
     return outputNum;
+  }
+
+  void _updateConversion() {
+    setState(() {
+      _convertedValue =
+          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
+    });
   }
 
   void _updateInputValue(String input) {
@@ -75,38 +110,13 @@ class _ConverterScreenState extends State<ConverterScreen> {
     });
   }
 
-  void _updateConversion() {
-    setState(() {
-      _convertedValue =
-          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
-    });
-  }
-
-  /// Creates fresh list of [DropdownMenuItem] widgets, given a list of [Unit]s.
-  void _createDropdownMenuItems() {
-    var newItems = <DropdownMenuItem>[];
-    for (var unit in widget.units) {
-      newItems.add(DropdownMenuItem(
-        value: unit.name,
-        child: Container(
-          child: Text(
-            unit.name,
-            softWrap: true,
-          ),
-        ),
-      ));
-    }
-    setState(() {
-      _unitMenuItems = newItems;
-    });
-  }
-
-  /// Sets the default values for the 'from' and 'to' [Dropdown]s.
-  void _setDefaults() {
-    setState(() {
-      _fromValue = widget.units[0];
-      _toValue = widget.units[1];
-    });
+  Unit _getUnit(String unitName) {
+    return widget.category.units.firstWhere(
+          (Unit unit) {
+        return unit.name == unitName;
+      },
+      orElse: null,
+    );
   }
 
   void _updateFromConversion(dynamic unitName) {
@@ -116,15 +126,6 @@ class _ConverterScreenState extends State<ConverterScreen> {
     if (_inputValue != null) {
       _updateConversion();
     }
-  }
-
-  Unit _getUnit(String unitName) {
-    return widget.units.firstWhere(
-          (Unit unit) {
-        return unit.name == unitName;
-      },
-      orElse: null,
-    );
   }
 
   void _updateToConversion(dynamic unitName) {

@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'category.dart';
+import 'category_tile.dart';
 import 'unit.dart';
 
 final _backgroundColor = Colors.green[100];
 
+/// Category Route (screen).
+///
+/// This is the 'home' screen of the Unit Converter. It shows a header and
+/// a list of [Categories].
+///
+/// While it is named CategoryRoute, a more apt name would be CategoryScreen,
+/// because it is responsible for the UI at the route's destination.
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen();
 
@@ -13,6 +21,8 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  // TODO: Keep track of a default [Category], and the currently-selected
+  // [Category]
   final _categories = <Category>[];
   static const _categoryNames = <String>[
     'Length',
@@ -63,6 +73,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
+    // TODO: Set the default [Category] for the unit converter that opens
     for (var i = 0; i < _categoryNames.length; i++) {
       _categories.add(Category(
         name: _categoryNames[i],
@@ -73,12 +84,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
+  // TODO: Fill out this function
+  /// Function to call when a [Category] is tapped.
+  void _onCategoryTap(Category category) {}
+
   /// Makes the correct number of rows for the list view.
   ///
   /// For portrait, we use a [ListView].
   Widget _buildCategoryWidgets() {
     return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => _categories[index],
+      itemBuilder: (BuildContext context, int index) {
+        return CategoryTile(
+          category: _categories[index],
+          onTap: _onCategoryTap,
+        );
+      },
       itemCount: _categories.length,
     );
   }
@@ -96,6 +116,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Import and use the Backdrop widget
     final listView = Container(
       color: _backgroundColor,
       padding: EdgeInsets.symmetric(horizontal: 8.0),
