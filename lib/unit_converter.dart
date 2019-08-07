@@ -277,27 +277,35 @@ class _UnitConverterState extends State<UnitConverter> {
           if (orientation == Orientation.portrait) {
             return converter;
           } else {
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                Container(
-                  width: 260.0,
-                  height: 500,
-                  color: Colors.red,
-                ),
-                arrows,
-                Container(
-                  width: 260.0,
-                  height: 500,
-                  color: Colors.blue,
-                ),
-                Container(
-                  width: 260.0,
-                  height: 500,
-                  color: Colors.green,
-                )
-              ],
+            return Center(
+              child: Container(
+                width: 450.0,
+                child: converter,
+              ),
             );
+
+
+//            return ListView(
+//              scrollDirection: Axis.horizontal,
+//              children: <Widget>[
+//                Container(
+//                  width: 260.0,
+//                  height: 500,
+//                  color: Colors.red,
+//                ),
+//                arrows,
+//                Container(
+//                  width: 260.0,
+//                  height: 500,
+//                  color: Colors.blue,
+//                ),
+//                Container(
+//                  width: 260.0,
+//                  height: 500,
+//                  color: Colors.green,
+//                )
+//              ],
+//            );
           }
         },
       ),
