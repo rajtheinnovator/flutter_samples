@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'backdrop.dart';
@@ -6,6 +8,14 @@ import 'category_tile.dart';
 import 'unit.dart';
 import 'unit_converter.dart';
 
+/// Loads in unit conversion data, and displays the data.
+///
+/// This is the main screen to our app. It retrieves conversion data from a
+/// JSON asset and from an API. It displays the [Categories] in the back panel
+/// of a [Backdrop] widget and shows the [UnitConverter] in the front panel.
+///
+/// While it is named CategoryRoute, a more apt name would be CategoryScreen,
+/// because it is responsible for the UI at the route's destination.
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen();
 
@@ -14,13 +24,16 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  // Keep track of a default [Category], and the currently-selected
-  // [Category]
-
   Category _defaultCategory;
   Category _currentCategory;
 
+  // Widgets are supposed to be deeply immutable objects. We can update and edit
+  // _categories as we build our app, and when we pass it into a widget's
+  // `children` property, we call .toList() on it.
+  // For more details, see https://github.com/dart-lang/sdk/issues/27755
   final _categories = <Category>[];
+
+  // TODO: Remove _categoryNames as they will be retrieved from the JSON asset
   static const _categoryNames = <String>[
     'Length',
     'Area',
@@ -67,22 +80,48 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }),
   ];
 
+  // TODO: Remove the overriding of initState(). Instead, we use
+  // didChangeDependencies()
   @override
   void initState() {
     super.initState();
-    // Set the default [Category] for the unit converter that opens
     for (var i = 0; i < _categoryNames.length; i++) {
-      var category = (Category(
+      var category = Category(
         name: _categoryNames[i],
         color: _baseColors[i],
         iconLocation: Icons.cake,
         units: _retrieveUnitList(_categoryNames[i]),
-      ));
+      );
       if (i == 0) {
         _defaultCategory = category;
       }
       _categories.add(category);
     }
+  }
+
+  // TODO: Uncomment this out. We use didChangeDependencies() so that we can
+  // wait for our JSON asset to be loaded in (async).
+  //  @override
+  //  Future<void> didChangeDependencies() async {
+  //    super.didChangeDependencies();
+  //    // We have static unit conversions located in our
+  //    // assets/data/regular_units.json
+  //    if (_categories.isEmpty) {
+  //      await _retrieveLocalCategories();
+  //    }
+  //  }
+
+  /// Retrieves a list of [Categories] and their [Unit]s
+  Future<void> _retrieveLocalCategories() async {
+    // Consider omitting the types for local variables. For more details on Effective
+    // Dart Usage, see https://www.dartlang.org/guides/language/effective-dart/usage
+    final json = DefaultAssetBundle.of(context)
+        .loadString('assets/data/regular_units.json');
+    final data = JsonDecoder().convert(await json);
+    if (data is! Map) {
+      throw ('Data retrieved from API is not a Map');
+    }
+    // TODO: Create Categories and their list of Units, from the JSON asset
   }
 
   /// Function to call when a [Category] is tapped.
@@ -92,9 +131,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
-  /// Makes the correct number of rows for the list view.
+  /// Makes the correct number of rows for the list view, based on whether the
+  /// device is portrait or landscape.
   ///
-  /// For portrait, we use a [ListView].
+  /// For portrait, we use a [ListView]. For landscape, we use a [GridView].
   Widget _buildCategoryWidgets(Orientation deviceOrientation) {
     if (deviceOrientation == Orientation.portrait) {
       return ListView.builder(
@@ -120,8 +160,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
+  // TODO: Delete this function; instead, read in the units from the JSON asset
+  // inside _retrieveLocalCategories()
   /// Returns a list of mock [Unit]s.
   List<Unit> _retrieveUnitList(String categoryName) {
+    // when the app first starts up
     return List.generate(10, (int i) {
       i += 1;
       return Unit(
@@ -133,8 +176,19 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_categories.isEmpty) {
+      return Center(
+        child: Container(
+          height: 180.0,
+          width: 180.0,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    // Based on the device size, figure out how to best lay out the list
+    // You can also use MediaQuery.of(context).size to calculate the orientation
     assert(debugCheckHasMediaQuery(context));
-    // Import and use the Backdrop widget
     final listView = Padding(
       padding: EdgeInsets.only(
         left: 8.0,
@@ -145,7 +199,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           .of(context)
           .orientation),
     );
-
     return Backdrop(
       currentCategory:
       _currentCategory == null ? _defaultCategory : _currentCategory,
