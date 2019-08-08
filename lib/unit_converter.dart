@@ -1,8 +1,12 @@
+// Import necessary packages
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_samples/unit.dart';
 import 'package:meta/meta.dart';
 
+import 'api.dart';
 import 'category.dart';
+import 'unit.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -28,8 +32,6 @@ class _UnitConverterState extends State<UnitConverter> {
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
-
-  // Pass this into the TextField so that the input value persists
   final _inputKey = GlobalKey(debugLabel: 'inputText');
 
   @override
@@ -96,11 +98,26 @@ class _UnitConverterState extends State<UnitConverter> {
     return outputNum;
   }
 
-  void _updateConversion() {
-    setState(() {
-      _convertedValue =
-          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
-    });
+  // If in the Currency [Category], call the API to retrieve the conversion.
+  // Remember, the API call is an async function.
+  Future<void> _updateConversion() async {
+    // Our API has a handy convert function, so we can use that for
+    // the Currency [Category]
+    if (widget.category.name == apiCategory['name']) {
+      final api = Api();
+      final conversion = await api.convert(apiCategory['route'],
+          _inputValue.toString(), _fromValue.name, _toValue.name);
+
+      setState(() {
+        _convertedValue = _format(conversion);
+      });
+    } else {
+      // For the static units, we do the conversion ourselves
+      setState(() {
+        _convertedValue = _format(
+            _inputValue * (_toValue.conversion / _fromValue.conversion));
+      });
+    }
   }
 
   void _updateInputValue(String input) {
@@ -259,15 +276,14 @@ class _UnitConverterState extends State<UnitConverter> {
       ),
     );
 
-    //Use a ListView instead of a Column
-    final converter = ListView(children: [
-      input,
-      arrows,
-      output,
-    ]);
+    final converter = ListView(
+      children: [
+        input,
+        arrows,
+        output,
+      ],
+    );
 
-    //Use an OrientationBuilder to add a width to the unit converter
-    // in landscape mode
     // Based on the orientation of the parent widget, figure out how to best
     // lay out our converter.
     return Padding(
@@ -284,8 +300,7 @@ class _UnitConverterState extends State<UnitConverter> {
               ),
             );
 
-
-//            return ListView(
+            //            return ListView(
 //              scrollDirection: Axis.horizontal,
 //              children: <Widget>[
 //                Container(
@@ -306,6 +321,7 @@ class _UnitConverterState extends State<UnitConverter> {
 //                )
 //              ],
 //            );
+
           }
         },
       ),
