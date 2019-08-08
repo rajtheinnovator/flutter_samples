@@ -124,7 +124,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
-  // Add the Currency Category retrieved from the API, to our _categories
   /// Retrieves a [Category] and its [Unit]s from an API on the web
   Future<void> _retrieveApiCategory() async {
     // Add a placeholder while we fetch the Currency category using the API
@@ -172,9 +171,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
     if (deviceOrientation == Orientation.portrait) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
+          var _category = _categories[index];
           return CategoryTile(
-            category: _categories[index],
-            onTap: _onCategoryTap,
+            category: _category,
+            onTap:
+            _category.name == apiCategory['name'] && _category.units.isEmpty
+                ? null
+                : _onCategoryTap,
           );
         },
         itemCount: _categories.length,
