@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'category_screen.dart';
 
+
 /// The function that is called when main.dart is run.
 void main() {
   runApp(UnitConverterApp());
@@ -19,6 +20,7 @@ class UnitConverterApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
       theme: ThemeData(
+        fontFamily: 'Raleway',
         textTheme: Theme
             .of(context)
             .textTheme

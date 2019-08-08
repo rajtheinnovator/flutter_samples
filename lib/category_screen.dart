@@ -32,18 +32,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
   // `children` property, we call .toList() on it.
   // For more details, see https://github.com/dart-lang/sdk/issues/27755
   final _categories = <Category>[];
-
-  // TODO: Remove _categoryNames as they will be retrieved from the JSON asset
-  static const _categoryNames = <String>[
-    'Length',
-    'Area',
-    'Volume',
-    'Mass',
-    'Time',
-    'Digital Storage',
-    'Energy',
-    'Currency',
-  ];
   static const _baseColors = <ColorSwatch>[
     ColorSwatch(0xFF6AB7A8, {
       'highlight': Color(0xFF6AB7A8),
@@ -79,9 +67,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
       'error': Color(0xFF912D2D),
     }),
   ];
+  static const _icons = <String>[
+    'assets/icons/length.png',
+    'assets/icons/area.png',
+    'assets/icons/volume.png',
+    'assets/icons/mass.png',
+    'assets/icons/time.png',
+    'assets/icons/digital_storage.png',
+    'assets/icons/power.png',
+    'assets/icons/currency.png',
+  ];
 
-  // Uncomment this out. We use didChangeDependencies() so that we can
-  // wait for our JSON asset to be loaded in (async).
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
@@ -102,7 +98,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     if (data is! Map) {
       throw ('Data retrieved from API is not a Map');
     }
-    // Create Categories and their list of Units, from the JSON asset
     var categoryIndex = 0;
     data.keys.forEach((key) {
       final List<Unit> units =
@@ -112,7 +107,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         name: key,
         units: units,
         color: _baseColors[categoryIndex],
-        iconLocation: Icons.cake,
+        iconLocation: _icons[categoryIndex],
       );
       setState(() {
         if (categoryIndex == 0) {
@@ -159,7 +154,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
