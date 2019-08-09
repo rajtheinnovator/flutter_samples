@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_samples/unitconvertersample/api.dart';
+import 'package:flutter_samples/unitconvertersample/category.dart';
+import 'package:flutter_samples/unitconvertersample/unit.dart';
 import 'package:meta/meta.dart';
-
-import 'api.dart';
-import 'category.dart';
-import 'unit.dart';
 
 const _padding = EdgeInsets.all(16.0);
 

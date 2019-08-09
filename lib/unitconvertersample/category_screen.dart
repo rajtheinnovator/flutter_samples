@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
-import 'api.dart';
-import 'backdrop.dart';
-import 'category.dart';
-import 'category_tile.dart';
-import 'unit.dart';
-import 'unit_converter.dart';
+import 'package:flutter_samples/unitconvertersample/api.dart';
+import 'package:flutter_samples/unitconvertersample/backdrop.dart';
+import 'package:flutter_samples/unitconvertersample/category.dart';
+import 'package:flutter_samples/unitconvertersample/category_tile.dart';
+import 'package:flutter_samples/unitconvertersample/unit.dart';
+import 'package:flutter_samples/unitconvertersample/unit_converter.dart';
 
 /// Loads in unit conversion data, and displays the data.
 ///

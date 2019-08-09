@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_samples/unitconvertersample/category.dart';
 import 'package:meta/meta.dart';
-
-import 'category.dart';
 
 // We use an underscore to indicate that these variables are private.
 // See https://www.dartlang.org/guides/language/effective-dart/design#libraries
